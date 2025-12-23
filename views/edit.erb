@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>メモ一覧</title>
+    <link rel="stylesheet" href="http://localhost:4567/style.css">
+  </head>
+  <body>
+    <div class="mb-16px">
+      <h1>メモアプリ</h1>
+    </div>
+    <div>
+      <form action="http://localhost:4567/memos/<%= @memo['id'] %>" method="post">
+        <div class="flex flex-column gap-16px">
+          <input type="hidden" id="_method" name="_method" value="PATCH">
+          <input type="hidden" name="id" value=<%= @memo['id'] %>>
+          <input type="text" name="title" value="<%= @memo['title'] %>" required class="p-8px">
+          <textarea name="content" required class="p-8px h-200px pre-line"><%= @memo['content'] %></textarea>
+        </div>
+        <div class="flex justify-space-around mt-16px">
+          <input type="submit" value="保存" class="bg-color-blue border-radius px-16px py-8px font-size-16px pointer">
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

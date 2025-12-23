@@ -1,0 +1,117 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 400px;
+  margin: 0;
+  padding: 24px;
+}
+
+a.btn-link,
+a.btn-link:hover,
+a.btn-link:active,
+a.btn-link:visited {
+  color: black;
+  text-decoration: none;
+}
+
+.mt-16px {
+  margin-top: 16px;
+}
+
+.mb-16px {
+  margin-bottom: 16px;
+}
+
+.p-8px {
+  padding: 8px;
+}
+
+.p-16px {
+  padding: 16px;
+}
+
+.pl-16px {
+  padding-left: 16px;
+}
+
+.px-16px {
+  padding-right: 16px;
+  padding-left: 16px;
+}
+
+.py-8px {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.w-400px {
+  width: 400px;
+}
+
+.h-200px {
+  height: 200px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.gap-16px {
+  gap: 16px;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+.justify-space-around {
+  justify-content: space-around;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-end {
+  align-items: end;
+}
+
+.border-black {
+  border: 1px solid black;
+}
+
+.border-radius {
+  border-radius: 8px;
+}
+
+.bg-color-blue {
+  background-color: #3e8ce2;
+  border: 1px solid #216bbb;
+  color: white;
+}
+
+.font-size-16px {
+  font-size: 16px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.line-style-inside {
+  list-style: inside;
+}
+
+.pre-line {
+  white-space: pre-line;
+}
