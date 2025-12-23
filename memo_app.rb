@@ -20,15 +20,6 @@ get '/memos/new' do
   erb :new
 end
 
-post '/memos' do
-  request.body.rewind
-  old_memos = JSON.load_file(DATA_FILE)
-  new_memos = [*old_memos, Hash[URI.decode_www_form(request.body.read)]]
-  File.write(DATA_FILE, JSON.generate(new_memos))
-  
-  redirect to('/memos'), 303
-end
-
 get '/memos/:id' do
   memo = find_memo(params['id'])
   if memo
@@ -38,16 +29,6 @@ get '/memos/:id' do
   end
 
   erb :show
-end
-
-delete '/memos/:id' do
-  halt 400 if find_memo(params['id']).nil?
-
-  old_memos = JSON.load_file(DATA_FILE)
-  new_memos = old_memos.filter { |memo| memo['id'] != params['id']}
-  File.write(DATA_FILE, JSON.generate(new_memos))
-
-  redirect to('/memos'), 303
 end
 
 get '/memos/:id/edit' do
@@ -61,18 +42,27 @@ get '/memos/:id/edit' do
   erb :edit
 end
 
+post '/memos' do
+  request.body.rewind
+  old_memos = JSON.load_file(DATA_FILE)
+  new_memos = [*old_memos, Hash[URI.decode_www_form(request.body.read)]]
+  File.write(DATA_FILE, JSON.generate(new_memos))
+
+  redirect to('/memos'), 303
+end
+
 patch '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
   request.body.rewind
-  req = Hash[URI.decode_www_form(request.body.read)]
+  new_memo = Hash[URI.decode_www_form(request.body.read)]
   old_memos = JSON.load_file(DATA_FILE)
   new_memos = old_memos.map do |memo|
     if memo['id'] == params['id'] 
       {
         **memo,
-        'title' => req['title'],
-        'content' => req['content']
+        'title' => new_memo['title'],
+        'content' => new_memo['content']
       }
     else
       memo
@@ -81,6 +71,16 @@ patch '/memos/:id' do
   File.write(DATA_FILE, JSON.generate(new_memos))
 
   redirect to("/memos/#{params['id']}"), 303
+end
+
+delete '/memos/:id' do
+  halt 400 if find_memo(params['id']).nil?
+
+  old_memos = JSON.load_file(DATA_FILE)
+  new_memos = old_memos.filter { |memo| memo['id'] != params['id']}
+  File.write(DATA_FILE, JSON.generate(new_memos))
+
+  redirect to('/memos'), 303
 end
 
 not_found do
