@@ -22,12 +22,8 @@ end
 
 post '/memos' do
   request.body.rewind
-  new_memos = []
   old_memos = JSON.load_file(DATA_FILE)
-  if old_memos then
-    new_memos.push(*old_memos)
-  end
-  new_memos.push(Hash[URI.decode_www_form(request.body.read)])
+  new_memos = [*old_memos, Hash[URI.decode_www_form(request.body.read)]]
   File.write(DATA_FILE, JSON.generate(new_memos))
   
   redirect to('/memos'), 303
