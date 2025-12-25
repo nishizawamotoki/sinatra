@@ -14,7 +14,7 @@
         <% if @memos %>
           <% @memos.each do |memo| %>
             <li>
-              <a href="http://localhost:4567/memos/<%= memo['id'] %>">メモ<%= memo['id'] %></a>
+              <a href="http://localhost:4567/memos/<%= memo['id'] %>"><%= memo['title'] %></a>
             </li>
           <% end %>
         <% end %>
