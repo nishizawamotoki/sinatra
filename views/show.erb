@@ -10,12 +10,12 @@
     </div>
     <div>
       <div class="flex flex-column gap-16px">
-        <p><%= @memo['title'] %></p>
-        <p class="pre-line"><%= @memo['content'] %></p>
+        <p><%= h @memo['title'] %></p>
+        <p class="pre-line"><%= h @memo['content'] %></p>
       </div>
       <div class="flex justify-space-around mt-16px">
-        <a href="http://localhost:4567/memos/<%= @memo['id'] %>/edit" class="btn-link border-black border-radius px-16px py-8px">変更</a>
-        <form action="http://localhost:4567/memos/<%= @memo['id'] %>" method="post">
+        <a href="http://localhost:4567/memos/<%= h @memo['id'] %>/edit" class="btn-link border-black border-radius px-16px py-8px">変更</a>
+        <form action="http://localhost:4567/memos/<%= h @memo['id'] %>" method="post">
           <input type="hidden" id="_method" name="_method" value="DELETE">
           <input type="submit" value="削除" class="bg-color-blue border-radius px-16px py-8px font-size-16px pointer">
         </form>

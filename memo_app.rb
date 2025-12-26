@@ -9,6 +9,12 @@ configure do
   File.write(DATA_FILE, '[]') unless File.exist?(DATA_FILE)
 end
 
+helpers do
+  def h(text)
+    ERB::Util.h(text)
+  end
+end
+
 get '/memos' do
   @memos = JSON.load_file(DATA_FILE)
   
