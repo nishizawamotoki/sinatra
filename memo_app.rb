@@ -1,11 +1,13 @@
-require 'bundler/setup'
+# frozen_string_literal: true
 
+require 'bundler/setup'
 require 'sinatra'
 require 'json'
 
+DATA_FILE = 'memos.json'
+
 configure do
   set :method_override, true
-  DATA_FILE = 'memos.json'
   File.write(DATA_FILE, '[]') unless File.exist?(DATA_FILE)
 end
 
@@ -17,7 +19,7 @@ end
 
 get '/memos' do
   @memos = JSON.load_file(DATA_FILE)
-  
+
   erb :index
 end
 
@@ -41,7 +43,7 @@ end
 
 get '/memos/:id/edit' do
   memo = find_memo(params['id'])
-  if memo 
+  if memo
     @memo = memo
   else
     halt 404
@@ -66,7 +68,7 @@ patch '/memos/:id' do
   new_memo = Hash[URI.decode_www_form(request.body.read)]
   old_memos = JSON.load_file(DATA_FILE)
   new_memos = old_memos.map do |memo|
-    if memo['id'] == params['id'] 
+    if memo['id'] == params['id']
       {
         **memo,
         'title' => new_memo['title'],
@@ -85,7 +87,7 @@ delete '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
   old_memos = JSON.load_file(DATA_FILE)
-  new_memos = old_memos.filter { |memo| memo['id'] != params['id']}
+  new_memos = old_memos.filter { |memo| memo['id'] != params['id'] }
   File.write(DATA_FILE, JSON.generate(new_memos))
 
   redirect to('/memos'), 303

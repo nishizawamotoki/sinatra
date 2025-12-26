@@ -11,9 +11,9 @@
     <div>
       <form action="http://localhost:4567/memos" method="post">
         <div class="flex flex-column gap-16px">
-          <input type="hidden" name="id" value=<%= h @new_id %>>
-          <input type="text" name="title" required  class="p-8px">
-          <textarea type="text" name="content" required  class="p-8px h-200px pre-line"></textarea>
+          <input type="hidden" name="id" value="<%= h @new_id %>">
+          <input type="text" name="title" required class="p-8px">
+          <textarea name="content" required class="p-8px h-200px pre-line"></textarea>
         </div>
         <div class="flex justify-center mt-16px">
           <input type="submit" value="保存" class="bg-color-blue border-radius px-16px py-8px font-size-16px pointer">
