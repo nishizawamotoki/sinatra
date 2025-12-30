@@ -16,4 +16,4 @@ gem をインストールします。
 
 `bundle exec ruby memo_app.rb`
 
-http://localhost:4567 でアプケーションにアクセスできます。
+http://localhost:4567/memos でアプケーションにアクセスできます。
