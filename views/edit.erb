@@ -12,7 +12,6 @@
       <form action="/memos/<%= h @memo['id'] %>" method="post">
         <div class="flex flex-column gap-16px">
           <input type="hidden" id="_method" name="_method" value="PATCH">
-          <input type="hidden" name="id" value="<%= h @memo['id'] %>">
           <input type="text" name="title" value="<%= h @memo['title'] %>" required class="p-8px">
           <textarea name="content" required class="p-8px h-200px pre-line"><%= h @memo['content'] %></textarea>
         </div>

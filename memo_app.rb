@@ -53,9 +53,8 @@ get '/memos/:id/edit' do
 end
 
 post '/memos' do
-  request.body.rewind
   old_memos = JSON.load_file(DATA_FILE)
-  new_memos = [*old_memos, Hash[URI.decode_www_form(request.body.read)]]
+  new_memos = [*old_memos, { 'id': params['id'], 'title': params['title'], 'content': params['content'] }]
   File.write(DATA_FILE, JSON.generate(new_memos))
 
   redirect to('/memos'), 303
@@ -64,15 +63,13 @@ end
 patch '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
-  request.body.rewind
-  new_memo = Hash[URI.decode_www_form(request.body.read)]
   old_memos = JSON.load_file(DATA_FILE)
   new_memos = old_memos.map do |memo|
     if memo['id'] == params['id']
       {
         **memo,
-        'title' => new_memo['title'],
-        'content' => new_memo['content']
+        'title' => params['title'],
+        'content' => params['content']
       }
     else
       memo
