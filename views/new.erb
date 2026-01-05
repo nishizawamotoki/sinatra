@@ -2,14 +2,14 @@
 <html lang="ja">
   <head>
     <title>新規メモ追加</title>
-    <link rel="stylesheet" href="http://localhost:4567/style.css">
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body>
     <div class="mb-16px">
       <h1>メモアプリ</h1>
     </div>
     <div>
-      <form action="http://localhost:4567/memos" method="post">
+      <form action="/memos" method="post">
         <div class="flex flex-column gap-16px">
           <input type="hidden" name="id" value="<%= h @new_id %>">
           <input type="text" name="title" required class="p-8px">

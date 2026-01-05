@@ -2,14 +2,14 @@
 <html lang="ja">
   <head>
     <title>メモ一覧</title>
-    <link rel="stylesheet" href="http://localhost:4567/style.css">
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body>
     <div class="mb-16px">
       <h1>メモアプリ</h1>
     </div>
     <div>
-      <form action="http://localhost:4567/memos/<%= h @memo['id'] %>" method="post">
+      <form action="/memos/<%= h @memo['id'] %>" method="post">
         <div class="flex flex-column gap-16px">
           <input type="hidden" id="_method" name="_method" value="PATCH">
           <input type="hidden" name="id" value="<%= h @memo['id'] %>">
