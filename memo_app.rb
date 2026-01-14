@@ -29,24 +29,14 @@ get '/memos/new' do
 end
 
 get '/memos/:id' do
-  memo = find_memo(params['id'])
-  if memo
-    @memo = memo
-  else
-    halt 404
-  end
-
+  @memo = find_memo(params['id'])
+  halt 404 if @memo.nil?
   erb :show
 end
 
 get '/memos/:id/edit' do
-  memo = find_memo(params['id'])
-  if memo
-    @memo = memo
-  else
-    halt 404
-  end
-
+  @memo = find_memo(params['id'])
+  halt 404 if @memo.nil?
   erb :edit
 end
 
