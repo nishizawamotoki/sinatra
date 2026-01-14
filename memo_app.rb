@@ -73,9 +73,9 @@ def find_memos
 end
 
 def create_memo(id, title, content)
-  old_memos = find_memos
-  new_memos = [*old_memos, { 'id': id, 'title': title, 'content': content }]
-  File.write(DATA_FILE, JSON.generate(new_memos))
+  memos = find_memos
+  memos << { 'id': id, 'title': title, 'content': content }
+  File.write(DATA_FILE, JSON.generate(memos))
 end
 
 def update_memo(id, title, content)
