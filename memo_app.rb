@@ -41,21 +41,24 @@ get '/memos/:id/edit' do
 end
 
 post '/memos' do
-  create_memo(params['id'], params['title'], params['content'])
+  new_memos = insert_memo(params['id'], params['title'], params['content'])
+  overwrite_data_file(new_memos)
   redirect to('/memos'), 303
 end
 
 patch '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
-  update_memo(params['id'], params['title'], params['content'])
+  new_memos = update_memo(params['id'], params['title'], params['content'])
+  overwrite_data_file(new_memos)
   redirect to("/memos/#{params['id']}"), 303
 end
 
 delete '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
-  delete_memo(params['id'])
+  new_memos = delete_memo(params['id'])
+  overwrite_data_file(new_memos)
   redirect to('/memos'), 303
 end
 
@@ -72,15 +75,14 @@ def find_memos
   JSON.load_file(DATA_FILE)
 end
 
-def create_memo(id, title, content)
+def insert_memo(id, title, content)
   memos = find_memos
   memos << { 'id': id, 'title': title, 'content': content }
-  File.write(DATA_FILE, JSON.generate(memos))
 end
 
 def update_memo(id, title, content)
-  old_memos = find_memos
-  new_memos = old_memos.map do |memo|
+  memos = find_memos
+  memos.map do |memo|
     if memo['id'] == id
       {
         **memo,
@@ -91,11 +93,13 @@ def update_memo(id, title, content)
       memo
     end
   end
-  File.write(DATA_FILE, JSON.generate(new_memos))
 end
 
 def delete_memo(id)
-  old_memos = find_memos
-  new_memos = old_memos.filter { |memo| memo['id'] != id }
-  File.write(DATA_FILE, JSON.generate(new_memos))
+  memos = find_memos
+  memos.filter { |memo| memo['id'] != id }
+end
+
+def overwrite_data_file(data)
+  File.write(DATA_FILE, JSON.generate(data))
 end
