@@ -41,7 +41,8 @@ get '/memos/:id/edit' do
 end
 
 post '/memos' do
-  new_memos = insert_memo(params['id'], params['title'], params['content'])
+  new_memo = { 'id' => params['id'], 'title' => params['title'], 'content' => params['content'] }
+  new_memos = push_memo(find_memos, new_memo)
   save_memos(new_memos)
   redirect to('/memos'), 303
 end
@@ -49,7 +50,8 @@ end
 patch '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
-  new_memos = update_memo(params['id'], params['title'], params['content'])
+  new_memo = { 'id' => params['id'], 'title' => params['title'], 'content' => params['content'] }
+  new_memos = update_memo(find_memos, new_memo)
   save_memos(new_memos)
   redirect to("/memos/#{params['id']}"), 303
 end
@@ -57,7 +59,7 @@ end
 delete '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
-  new_memos = delete_memo(params['id'])
+  new_memos = delete_memo(find_memos, params['id'])
   save_memos(new_memos)
   redirect to('/memos'), 303
 end
@@ -75,19 +77,17 @@ def find_memos
   JSON.load_file(DATA_FILE)
 end
 
-def insert_memo(id, title, content)
-  memos = find_memos
-  memos << { 'id': id, 'title': title, 'content': content }
+def push_memo(memos, new_memo)
+  memos << new_memo
 end
 
-def update_memo(id, title, content)
-  memos = find_memos
+def update_memo(memos, new_memo)
   memos.map do |memo|
-    if memo['id'] == id
+    if memo['id'] == new_memo['id']
       {
         **memo,
-        'title' => title,
-        'content' => content
+        'title' => new_memo['title'],
+        'content' => new_memo['content']
       }
     else
       memo
@@ -95,8 +95,7 @@ def update_memo(id, title, content)
   end
 end
 
-def delete_memo(id)
-  memos = find_memos
+def delete_memo(memos, id)
   memos.filter { |memo| memo['id'] != id }
 end
 
