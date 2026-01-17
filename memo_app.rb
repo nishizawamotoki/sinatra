@@ -42,7 +42,7 @@ end
 
 post '/memos' do
   new_memos = insert_memo(params['id'], params['title'], params['content'])
-  overwrite_data_file(new_memos)
+  save_memos(new_memos)
   redirect to('/memos'), 303
 end
 
@@ -50,7 +50,7 @@ patch '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
   new_memos = update_memo(params['id'], params['title'], params['content'])
-  overwrite_data_file(new_memos)
+  save_memos(new_memos)
   redirect to("/memos/#{params['id']}"), 303
 end
 
@@ -58,7 +58,7 @@ delete '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
   new_memos = delete_memo(params['id'])
-  overwrite_data_file(new_memos)
+  save_memos(new_memos)
   redirect to('/memos'), 303
 end
 
@@ -100,6 +100,6 @@ def delete_memo(id)
   memos.filter { |memo| memo['id'] != id }
 end
 
-def overwrite_data_file(data)
-  File.write(DATA_FILE, JSON.generate(data))
+def save_memos(memos)
+  File.write(DATA_FILE, JSON.generate(memos))
 end
