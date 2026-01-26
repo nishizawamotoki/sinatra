@@ -1,0 +1,5 @@
+CREATE TABLE memos (
+  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  title TEXT NOT NULL CHECK (title <> ''),
+  content TEXT NOT NULL
+);
