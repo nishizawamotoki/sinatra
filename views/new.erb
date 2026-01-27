@@ -11,7 +11,6 @@
     <div>
       <form action="/memos" method="post">
         <div class="flex flex-column gap-16px">
-          <input type="hidden" name="id" value="<%= h @new_id %>">
           <input type="text" name="title" required class="p-8px">
           <textarea name="content" required class="p-8px h-200px pre-line"></textarea>
         </div>

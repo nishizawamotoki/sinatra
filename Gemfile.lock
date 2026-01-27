@@ -67,6 +67,8 @@ GEM
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
+    pg (1.6.3)
+    pg (1.6.3-arm64-darwin)
     prism (1.7.0)
     puma (7.1.0)
       nio4r (~> 2.0)
@@ -136,6 +138,7 @@ PLATFORMS
 
 DEPENDENCIES
   erb_lint
+  pg
   puma
   rackup
   rubocop-fjord
