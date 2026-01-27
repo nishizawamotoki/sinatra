@@ -42,11 +42,14 @@ get '/memos/:id/edit' do
 end
 
 post '/memos' do
+  halt 400 if params['title'].to_s.empty? || params['content'].nil?
+
   create_memo(params['title'], params['content'])
   redirect to('/memos'), 303
 end
 
 patch '/memos/:id' do
+  halt 400 if params['title'].to_s.empty? || params['content'].nil?
   halt 400 if find_memo(params['id']).nil?
 
   update_memo(params['id'], params['title'], params['content'])
@@ -61,7 +64,11 @@ delete '/memos/:id' do
 end
 
 not_found do
-  '404 not found.'
+  '404 Not Found.'
+end
+
+error 400 do
+  '400 Bad Request.'
 end
 
 def find_memo(id)
