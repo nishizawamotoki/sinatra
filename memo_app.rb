@@ -5,13 +5,11 @@ require 'sinatra'
 require 'json'
 require 'pg'
 
-DATA_FILE = 'memos.json'
 DB_NAME = 'memo_app'
 
 configure do
   set :method_override, true
-  set :db_conn, PG.connect( dbname: DB_NAME )
-  File.write(DATA_FILE, '[]') unless File.exist?(DATA_FILE)
+  set :db_conn, PG.connect(dbname: DB_NAME)
 end
 
 helpers do
