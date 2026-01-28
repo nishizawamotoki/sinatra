@@ -10,7 +10,7 @@
 git clone
 ```
 
-ローカル環境にデータベースとテーブルを作成します。PostgreSQL がインストールされている必要があります。
+ローカル環境にデータベースとテーブルを作成します。PostgreSQL がインストールされている必要があります（バージョン 18 で動作確認済み）
 
 ```
 psql -d postgres -f create_database.sql
