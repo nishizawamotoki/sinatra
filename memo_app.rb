@@ -3,12 +3,13 @@
 require 'bundler/setup'
 require 'sinatra'
 require 'json'
+require 'pg'
 
-DATA_FILE = 'memos.json'
+DB_NAME = 'memo_app'
 
 configure do
   set :method_override, true
-  File.write(DATA_FILE, '[]') unless File.exist?(DATA_FILE)
+  set :db_conn, PG.connect(dbname: DB_NAME)
 end
 
 helpers do
@@ -23,8 +24,6 @@ get '/memos' do
 end
 
 get '/memos/new' do
-  memos = find_memos
-  @new_id = memos.empty? ? 1 : memos.last['id'].to_i + 1
   erb :new
 end
 
@@ -41,64 +40,51 @@ get '/memos/:id/edit' do
 end
 
 post '/memos' do
-  new_memo = { 'id' => params['id'], 'title' => params['title'], 'content' => params['content'] }
-  new_memos = push_memo(find_memos, new_memo)
-  save_memos(new_memos)
+  halt 400 if params['title'].to_s.empty? || params['content'].nil?
+
+  create_memo(params['title'], params['content'])
   redirect to('/memos'), 303
 end
 
 patch '/memos/:id' do
+  halt 400 if params['title'].to_s.empty? || params['content'].nil?
   halt 400 if find_memo(params['id']).nil?
 
-  new_memo = { 'id' => params['id'], 'title' => params['title'], 'content' => params['content'] }
-  new_memos = update_memo(find_memos, new_memo)
-  save_memos(new_memos)
+  update_memo(params['id'], params['title'], params['content'])
   redirect to("/memos/#{params['id']}"), 303
 end
 
 delete '/memos/:id' do
   halt 400 if find_memo(params['id']).nil?
 
-  new_memos = delete_memo(find_memos, params['id'])
-  save_memos(new_memos)
+  delete_memo(params['id'])
   redirect to('/memos'), 303
 end
 
 not_found do
-  '404 not found.'
+  '404 Not Found.'
+end
+
+error 400 do
+  '400 Bad Request.'
 end
 
 def find_memo(id)
-  memos = find_memos
-  memos.find { |memo| memo['id'] == id }
+  settings.db_conn.exec_params('SELECT * FROM memos WHERE id = $1', [id]).first
 end
 
 def find_memos
-  JSON.load_file(DATA_FILE)
+  settings.db_conn.exec_params('SELECT * FROM memos ORDER BY id')
 end
 
-def push_memo(memos, new_memo)
-  memos << new_memo
+def create_memo(title, content)
+  settings.db_conn.exec_params('INSERT INTO memos (title, content) VALUES ($1, $2)', [title, content])
 end
 
-def update_memo(memos, new_memo)
-  memos.map do |memo|
-    if memo['id'] == new_memo['id']
-      {
-        **memo,
-        'title' => new_memo['title'],
-        'content' => new_memo['content']
-      }
-    else
-      memo
-    end
-  end
+def update_memo(id, title, content)
+  settings.db_conn.exec_params('UPDATE memos SET title = $1, content = $2 WHERE id = $3', [title, content, id])
 end
 
-def delete_memo(memos, id)
-  memos.filter { |memo| memo['id'] != id }
-end
-
-def save_memos(memos)
-  File.write(DATA_FILE, JSON.generate(memos))
+def delete_memo(id)
+  settings.db_conn.exec_params('DELETE FROM memos WHERE id = $1', [id])
 end
